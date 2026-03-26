@@ -1,0 +1,45 @@
+$color-primary: #35273a;
+$color-orange: #ffb770;
+$color-orange-light: #ffcfa1;
+$color-orange-bg: #fee9d4;
+$color-orange-transparent: rgba(255, 183, 112, 0.3);
+$color-white: #fefdff;
+$color-dark-text: #221227;
+$color-card-bg: #faf5fe;
+$color-list-item-bg: rgba(217, 217, 217, 0.08);
+$color-purple-mid: #8e7099;
+$color-purple-bright: #914ea5;
+$color-form-bg: rgba(142, 112, 153, 0.16);
+
+$font-heading: 'Nerko One', cursive;
+$font-body: 'Mulish', sans-serif;
+$font-button: 'Nokora', sans-serif;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+$spacing-xxxl: 64px;
+
+$radius-sm: 5px;
+$radius-md: 10px;
+$radius-lg: 20px;
+$radius-pill: 100px;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: $font-body;
+  background-color: $color-white;
+  color: $color-dark-text;
+}

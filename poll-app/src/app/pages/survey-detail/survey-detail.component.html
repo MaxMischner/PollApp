@@ -1,0 +1,147 @@
+@if (survey()) {
+  <main class="detail">
+
+    <header class="detail__topbar">
+      <div class="detail__logo" (click)="goBack()">
+        <img src="Property 1=Purple dark.png" class="detail__logo-img" alt="Poll App" />
+      </div>
+      <button class="btn btn--create" (click)="goBack()">
+        ← Back to surveys
+      </button>
+    </header>
+
+    <div class="detail__content">
+
+      <section class="detail__survey-panel">
+
+        <div class="detail__status-row">
+          <span class="detail__status-badge">
+            {{ survey()!.status === 'closed' ? 'Past Survey' : 'Published' }}
+          </span>
+        </div>
+
+        <div class="detail__meta-row">
+          @if (survey()!.deadline) {
+            <span class="detail__meta-text">
+              Ends on {{ survey()!.deadline | date:'dd.MM.yyyy' }}
+            </span>
+          }
+          @if (survey()!.category) {
+            <span class="detail__meta-text">
+              Category: {{ survey()!.category }}
+            </span>
+          }
+        </div>
+
+        <h1 class="detail__title">{{ survey()!.title }}</h1>
+
+        @if (survey()!.description) {
+          <p class="detail__description">{{ survey()!.description }}</p>
+        }
+
+        <div class="detail__questions-grid">
+          @for (question of survey()!.questions; track question.id; let i = $index) {
+            <div class="question-block">
+
+              <div class="question-block__header">
+                <h2 class="question-block__title">{{ question.text }}</h2>
+                @if (question.allowMultiple) {
+                  <p class="question-block__hint">More than one answers are possible.</p>
+                }
+              </div>
+
+              <div class="question-block__options">
+                @for (option of question.options; track option.id) {
+                  <div
+                    class="answer"
+                    [class.answer--selected]="isSelected(question.id, option.id)"
+                    [class.answer--disabled]="hasVoted() || survey()!.status === 'closed'"
+                    (click)="toggleOption(question, option.id)"
+                  >
+                    <div
+                      class="answer__checkbox"
+                      [class.answer__checkbox--checked]="isSelected(question.id, option.id)"
+                    ></div>
+
+                    <div class="answer__label-row">
+                      <span class="answer__letter">{{ option.label }}.</span>
+                      <span class="answer__text">{{ option.text }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+
+            </div>
+          }
+        </div>
+
+        @if (survey()!.status === 'active' && !hasVoted()) {
+          <div class="detail__cta-row">
+            <button
+              class="btn btn--complete"
+              [disabled]="!canSubmit()"
+              (click)="submitVote()"
+            >
+              Complete survey
+            </button>
+          </div>
+        }
+
+      </section>
+
+      <aside class="detail__results">
+
+        <h2 class="results__title">
+          Survey results
+          @if (survey()!.status === 'active') {
+            <span class="results__live">LIVE</span>
+          }
+        </h2>
+
+        @if (!hasVoted() && survey()!.status === 'active') {
+          <div class="results__placeholder">
+            <p class="results__placeholder-text">Results will be shown here after participants complete the survey.</p>
+            <p class="results__placeholder-empty">There are no answers yet.</p>
+          </div>
+        } @else {
+          <div class="results__list">
+            @for (question of survey()!.questions; track question.id) {
+              <div class="result-block">
+
+                <h3 class="result-block__question">{{ question.text }}</h3>
+
+                <div class="result-block__bars">
+                  @for (option of question.options; track option.id) {
+                    <div class="bar-row">
+                      <span class="bar-row__letter">{{ option.label }}</span>
+
+                      <div class="bar-row__track">
+                        <div
+                          class="bar-row__fill"
+                          [style.width.%]="getVotePercentage(question, option)"
+                        ></div>
+                      </div>
+
+                      <span class="bar-row__percent">
+                        {{ getVotePercentage(question, option) }}%
+                      </span>
+                    </div>
+                  }
+                </div>
+
+              </div>
+            }
+          </div>
+        }
+
+      </aside>
+
+    </div>
+  </main>
+
+} @else {
+  <div class="detail__not-found">
+    <p>Survey not found.</p>
+    <button class="btn btn--create" (click)="goBack()">← Back</button>
+  </div>
+}
