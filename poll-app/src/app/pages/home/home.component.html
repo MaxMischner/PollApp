@@ -1,0 +1,132 @@
+<main class="home">
+
+  <header class="home__logo-bar">
+    <img src="Property 1=Orange.png" class="logo-img" alt="Poll App" />
+  </header>
+
+  <section class="home__hero">
+    <div class="home__hero-left">
+      <h1 class="home__headline">
+        Collect Feedback,<br />Unlock Ideas
+      </h1>
+      <p class="home__subtext">
+        Create and share surveys in minutes – from team events to workplace
+        culture. Collect opinions, engage your audience, and turn feedback
+        into action.
+      </p>
+      <button class="btn btn--primary" (click)="openCreateSurvey()">
+        New survey
+      </button>
+    </div>
+    <div class="home__hero-right">
+      <div class="hero-visual">
+
+        <span class="hv-slot hv-slot--question">
+          <img src="Questin mark.png" class="hv-img hv-img--q" alt="" />
+        </span>
+        <span class="hv-slot hv-slot--star">
+          <img src="star.png" class="hv-img hv-img--s" alt="" />
+        </span>
+        <span class="hv-slot hv-slot--check">
+          <img src="check.png" class="hv-img hv-img--c" alt="" />
+        </span>
+
+        <img src="phone.png" class="hv-phone" alt="" />
+
+        <span class="hv-slot hv-slot--bubble">
+          <img src="typing bubble.png" class="hv-img hv-img--b" alt="" />
+        </span>
+
+        <span class="hv-dot hv-dot--peach"></span>
+        <span class="hv-dot hv-dot--purple"></span>
+        <span class="hv-dot hv-dot--sm"></span>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="home__surveys">
+
+    <h2 class="home__surveys-title">Your surveys</h2>
+
+    @if (endingSoon().length > 0) {
+      <div class="home__ending-soon">
+        <h3 class="home__ending-title">Ending soon surveys</h3>
+        <div class="home__cards-row">
+          @for (survey of endingSoon(); track survey.id) {
+            <app-survey-card
+              [survey]="survey"
+              (cardClicked)="navigateToSurvey($event)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    <div class="home__controls">
+      <div class="home__filters">
+        <button
+          class="filter-pill"
+          [class.filter-pill--active]="activeTab() === 'active'"
+          (click)="setActiveTab('active')"
+        >
+          Active survey
+        </button>
+        <button
+          class="filter-pill"
+          [class.filter-pill--active]="activeTab() === 'past'"
+          (click)="setActiveTab('past')"
+        >
+          Past survey
+        </button>
+      </div>
+
+      <div class="home__sort" (click)="toggleSort()">
+        <span class="home__sort-label">
+          {{ selectedCategory() ?? 'Sort by categories' }}
+        </span>
+        <span class="home__sort-arrow" [class.home__sort-arrow--open]="sortOpen()">▾</span>
+
+        @if (sortOpen()) {
+          <div class="sort-dropdown" (click)="$event.stopPropagation()">
+            <button class="sort-dropdown__item" [class.sort-dropdown__item--active]="selectedCategory() === null" (click)="selectCategory(null)">All categories</button>
+            @for (cat of categories(); track cat) {
+              <button
+                class="sort-dropdown__item"
+                [class.sort-dropdown__item--active]="selectedCategory() === cat"
+                (click)="selectCategory(cat)"
+              >{{ cat }}</button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="home__list">
+      @if (activeTab() === 'active') {
+        @if (filteredActive().length === 0) {
+          <p class="home__empty">No active surveys yet.</p>
+        } @else {
+          @for (survey of filteredActive(); track survey.id) {
+            <app-survey-list-item
+              [survey]="survey"
+              (itemClicked)="navigateToSurvey($event)"
+            />
+          }
+        }
+      } @else {
+        @if (filteredPast().length === 0) {
+          <p class="home__empty">No past surveys yet.</p>
+        } @else {
+          @for (survey of filteredPast(); track survey.id) {
+            <app-survey-list-item
+              [survey]="survey"
+              (itemClicked)="navigateToSurvey($event)"
+            />
+          }
+        }
+      }
+    </div>
+
+  </section>
+</main>
