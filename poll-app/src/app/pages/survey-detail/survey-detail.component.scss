@@ -60,7 +60,16 @@
 }
 
 .detail__status-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: $spacing-xs;
+}
+
+// X-Button: auf Desktop versteckt
+.btn--back-mobile {
+  display: none;
 }
 
 .detail__status-badge {
@@ -249,6 +258,28 @@
   align-self: flex-start;
 }
 
+// Toggle-Button: auf Desktop versteckt, nur auf Mobile aktiv
+.results__toggle {
+  display: none;
+}
+
+.results__toggle-label {
+  font-family: $font-body;
+  font-size: 18px;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.results__toggle-arrow {
+  font-size: 20px;
+  color: $color-primary;
+  transition: transform 0.2s ease;
+
+  &--open {
+    transform: rotate(-180deg);
+  }
+}
+
 .results {
   &__title {
     font-family: $font-heading;
@@ -417,4 +448,163 @@
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.5; }
+}
+
+// ─── Mobile (≤ 480 px / Figma 375 px frame) ───────────────────────────────
+@media (max-width: 480px) {
+
+  // Seiten-Container: weißer Hintergrund, Padding wie Figma
+  .detail {
+    padding: 48px 0;
+  }
+
+  // Topbar: seitliches Padding, kein vertikaler Abstand
+  .detail__topbar {
+    max-width: 100%;
+    padding: 0 16px;
+    margin: 0;
+  }
+
+  // Topbar-Back-Button auf Mobile ausblenden (ersetzt durch X im Panel)
+  .detail__topbar .btn--create {
+    display: none;
+  }
+
+  // X-Button im Status-Row auf Mobile einblenden
+  .btn--back-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 32px;
+    padding: 8px 12px;
+    background-color: #FFCFA1;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    color: $color-primary;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  // Content: Spalten-Layout, 54 px Abstand zum Logo, 16 px Seitenpadding
+  .detail__content {
+    flex-direction: column;
+    align-items: center;
+    max-width: 375px;
+    padding: 0 16px;
+    gap: 56px;
+    margin: 54px auto 0;
+  }
+
+  // Survey-Panel: 343 px via Parent-Padding, Kinder zentriert auf 320 px
+  // gap: 0 — Abstände werden per margin auf den Kindelementen gesetzt
+  .detail__survey-panel {
+    width: 100%;
+    padding: 40px 0;
+    border-radius: 0 100px 0 0;
+    gap: 0;
+    align-items: center;
+  }
+
+  // Status-Zeile: 307 px, 16 px Abstand nach unten (Frame 510 gap)
+  .detail__status-row {
+    width: 307px;
+    margin-bottom: 16px;
+  }
+
+  // Datum + Kategorie: 320 px, 16 px Abstand zum Titel (Frame 510 gap)
+  .detail__meta-row {
+    width: 320px;
+    margin-bottom: 16px;
+  }
+
+  // Titel: 48 px / 42 px line-height, 24 px Abstand zur Beschreibung
+  .detail__title {
+    width: 320px;
+    font-size: 48px;
+    line-height: 42px;
+    margin: 0 0 24px;
+  }
+
+  // Beschreibung: 40 px Abstand zu den Fragen (content survey gap)
+  .detail__description {
+    width: 320px;
+    margin-bottom: 40px;
+  }
+
+  // Fragen: einspaltig, 320 px breit, kein extra margin-top
+  .detail__questions-grid {
+    grid-template-columns: 1fr;
+    width: 320px;
+    gap: 24px;
+    margin-top: 0;
+  }
+
+  // CTA-Zeile: 40 px Abstand nach oben (Questions+CTA gap)
+  .detail__cta-row {
+    width: 320px;
+    margin-top: 40px;
+  }
+
+  // Submit-Button: Figma "primary button" — orange, 147 × 48 px
+  .btn--complete {
+    width: 147px;
+    height: 48px;
+    padding: 12px 16px;
+    background-color: $color-orange;
+    color: $color-dark-text;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+
+  // Ergebnisse: kein Sticky, volle Breite unterhalb des Panels
+  .detail__results {
+    width: 100%;
+    position: static;
+    top: auto;
+    align-self: auto;
+  }
+
+  // Ergebnis-Titel: explizit 32 px
+  .results__title {
+    font-size: 32px;
+  }
+
+  // Platzhalter auf mobile-Breite anpassen
+  .results__placeholder {
+    width: 100%;
+  }
+
+  // Toggle-Button: auf Mobile einblenden
+  .results__toggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 4px 6px 4px 10px;
+    gap: 4px;
+    width: 153px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  // Content: standardmäßig eingeklappt auf Mobile
+  .results__content {
+    display: none;
+  }
+
+  // Content: sichtbar wenn Section offen ist
+  .detail__results--open .results__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"c:\\\\Users\\\\Maxmi\\\\OneDrive\\\\Alte Ordner und Daten\\\\Dokumente \\(1\\)\\\\GitHub\\\\PollApp\" -type f -name \"*.scss\")",
+      "Bash(find \"c:\\\\Users\\\\Maxmi\\\\OneDrive\\\\Alte Ordner und Daten\\\\Dokumente \\(1\\)\\\\GitHub\\\\PollApp\" -type f -name \"home.component.html\")"
+    ]
+  }
+}

@@ -9,6 +9,17 @@
   padding: 40px;
 }
 
+// Logo bar: nur auf Mobile sichtbar (desktop: display none via Media Query)
+.cs-logo-bar {
+  display: none;
+}
+
+.cs-logo__img {
+  height: 48px;
+  width: auto;
+  cursor: pointer;
+}
+
 .cs-card {
   background-color: $color-primary;
   border-radius: $radius-sm $radius-pill $radius-sm $radius-sm;
@@ -493,4 +504,147 @@
     }
   }
 
+}
+
+// ─── Mobile (≤ 480 px / Figma 375 px frame) ───────────────────────────────
+@media (max-width: 480px) {
+
+  // Logo bar: auf Mobile einblenden
+  .cs-logo-bar {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    width: 100%;
+  }
+
+  // Page: top-aligned, no horizontal padding, white bg
+  .create-page {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 48px 0 0;
+    gap: 80px;
+  }
+
+  // Card: full width purple panel, centered children
+  .cs-card {
+    width: 100%;
+    max-width: 375px;
+    padding: 40px 0;
+    gap: 48px;
+    border-radius: 5px 100px 5px 5px;
+    align-items: center;
+  }
+
+  // Header: 325px wide, badge+title left, X button right
+  .cs-card__header {
+    width: 325px;
+    align-items: flex-start;
+  }
+
+  // Title area: column, 16px gap between badge and title
+  .cs-card__title-area {
+    gap: 16px;
+  }
+
+  // Title: 56px / 42px line-height
+  .cs-card__title {
+    font-size: 56px;
+    line-height: 42px;
+  }
+
+  // Cancel button: compact X-only (hide "Cancel" text, show ✕ only)
+  .btn--cancel {
+    width: 39px;
+    height: 32px;
+    padding: 8px 12px;
+    gap: 0;
+    font-size: 0;
+
+    span {
+      font-size: 16px;
+    }
+  }
+
+  // Form: center-aligned
+  .cs-card__form {
+    align-items: center;
+    width: 100%;
+  }
+
+  // Footer: 325px, right-aligned
+  .cs-card__footer {
+    width: 325px;
+  }
+
+  // Publish button: 127 × 48px, rounded
+  .btn--publish {
+    width: 127px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  // Form fields container: 340px, inner padding, large top-right radius
+  .form-fields-container {
+    width: 100%;
+    max-width: 340px;
+    padding: 40px 10px;
+    gap: 48px;
+    border-radius: 5px 80px 5px 5px;
+  }
+
+  // Top row: stack fields vertically, 320px wide, 8px gap
+  .fields-top-row {
+    flex-direction: column;
+    gap: 8px;
+    width: 320px;
+  }
+
+  // Left col: full width, 8px gap between fields
+  .field-col-left {
+    width: 100%;
+    gap: 8px;
+  }
+
+  // Sub-row (date + category): stack vertically, stretch children to full width
+  .field-sub-row {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  // All form fields: full width so every input is the same length
+  .form-field {
+    width: 100%;
+  }
+
+  // Right col (description): full width
+  .field-col-right {
+    width: 100%;
+    flex: none;
+  }
+
+  // Questions: single column, 40px gap between questions
+  .questions-row {
+    flex-direction: column;
+    width: 320px;
+    column-gap: 0;
+    row-gap: 40px;
+  }
+
+  // Question slot: 320px wide
+  .question-slot {
+    width: 320px;
+    gap: 40px;
+  }
+
+  // Add question slot: no top offset on mobile
+  .question-slot--add {
+    padding-top: 0;
+  }
+
+  // Question builder: 320px wide
+  .question-builder {
+    width: 320px;
+  }
 }

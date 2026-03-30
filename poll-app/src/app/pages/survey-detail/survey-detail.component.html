@@ -18,6 +18,7 @@
           <span class="detail__status-badge">
             {{ survey()!.status === 'closed' ? 'Past Survey' : 'Published' }}
           </span>
+          <button class="btn btn--back-mobile" (click)="goBack()">✕</button>
         </div>
 
         <div class="detail__meta-row">
@@ -89,50 +90,59 @@
 
       </section>
 
-      <aside class="detail__results">
+      <aside class="detail__results" [class.detail__results--open]="resultsOpen()">
 
-        <h2 class="results__title">
-          Survey results
-          @if (survey()!.status === 'active') {
-            <span class="results__live">LIVE</span>
-          }
-        </h2>
+        <!-- Nur auf Mobile sichtbar: Dropdown-Toggle -->
+        <button class="results__toggle" (click)="toggleResults()">
+          <span class="results__toggle-label">{{ resultsOpen() ? 'Close result' : 'See result' }}</span>
+          <span class="results__toggle-arrow" [class.results__toggle-arrow--open]="resultsOpen()">▾</span>
+        </button>
 
-        @if (!hasVoted() && survey()!.status === 'active') {
-          <div class="results__placeholder">
-            <p class="results__placeholder-text">Results will be shown here after participants complete the survey.</p>
-            <p class="results__placeholder-empty">There are no answers yet.</p>
-          </div>
-        } @else {
-          <div class="results__list">
-            @for (question of survey()!.questions; track question.id) {
-              <div class="result-block">
-
-                <h3 class="result-block__question">{{ question.text }}</h3>
-
-                <div class="result-block__bars">
-                  @for (option of question.options; track option.id) {
-                    <div class="bar-row">
-                      <span class="bar-row__letter">{{ option.label }}</span>
-
-                      <div class="bar-row__track">
-                        <div
-                          class="bar-row__fill"
-                          [style.width.%]="getVotePercentage(question, option)"
-                        ></div>
-                      </div>
-
-                      <span class="bar-row__percent">
-                        {{ getVotePercentage(question, option) }}%
-                      </span>
-                    </div>
-                  }
-                </div>
-
-              </div>
+        <!-- Content: Desktop immer sichtbar, Mobile nur wenn offen -->
+        <div class="results__content">
+          <h2 class="results__title">
+            Survey results
+            @if (survey()!.status === 'active') {
+              <span class="results__live">LIVE</span>
             }
-          </div>
-        }
+          </h2>
+
+          @if (!hasVoted() && survey()!.status === 'active') {
+            <div class="results__placeholder">
+              <p class="results__placeholder-text">Results will be shown here after participants complete the survey.</p>
+              <p class="results__placeholder-empty">There are no answers yet.</p>
+            </div>
+          } @else {
+            <div class="results__list">
+              @for (question of survey()!.questions; track question.id) {
+                <div class="result-block">
+
+                  <h3 class="result-block__question">{{ question.text }}</h3>
+
+                  <div class="result-block__bars">
+                    @for (option of question.options; track option.id) {
+                      <div class="bar-row">
+                        <span class="bar-row__letter">{{ option.label }}</span>
+
+                        <div class="bar-row__track">
+                          <div
+                            class="bar-row__fill"
+                            [style.width.%]="getVotePercentage(question, option)"
+                          ></div>
+                        </div>
+
+                        <span class="bar-row__percent">
+                          {{ getVotePercentage(question, option) }}%
+                        </span>
+                      </div>
+                    }
+                  </div>
+
+                </div>
+              }
+            </div>
+          }
+        </div>
 
       </aside>
 

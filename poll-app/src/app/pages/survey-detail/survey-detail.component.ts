@@ -24,6 +24,11 @@ export class SurveyDetailComponent implements OnInit {
   protected survey = signal<Survey | null>(null);
   protected hasVoted = signal<boolean>(false);
   protected selectedOptions = signal<VoteState>({});
+  protected resultsOpen = signal<boolean>(true);
+
+  protected toggleResults(): void {
+    this.resultsOpen.update(v => !v);
+  }
 
   protected canSubmit = computed(() => {
     const survey = this.survey();

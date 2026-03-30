@@ -379,6 +379,140 @@
   padding: $spacing-xxl;
 }
 
+// ─── Mobile (≤ 480 px / Figma 375 px frame) ───────────────────────────────
+@media (max-width: 480px) {
+
+  .home {
+    padding: 48px 0;
+  }
+
+  // Logo bar: remove desktop vertical padding, add side padding
+  .home__logo-bar {
+    max-width: 100%;
+    padding: 0 16px;
+    margin-bottom: 0;
+  }
+
+  // Hero: display:contents löst die Wrapper auf → alle 4 Kinder werden
+  // direkte Flex-Items von .home__hero und lassen sich frei sortieren.
+  .home__hero {
+    flex-direction: column;
+    align-items: center;
+    max-width: 375px;
+    padding: 0;
+    margin-top: 54px;
+    margin-bottom: 80px;
+    gap: 24px;
+  }
+
+  .home__hero-left,
+  .home__hero-right {
+    display: contents;
+  }
+
+  .home__headline {
+    order: 1;
+    width: 343px;
+    font-size: 62px;
+    line-height: 50px;
+  }
+
+  .hero-visual {
+    order: 2;
+    width: 343px;
+    height: 250px;
+  }
+
+  .home__subtext {
+    order: 3;
+    font-size: 18px;
+    line-height: 23px;
+    width: 343px;
+    max-width: 343px;
+  }
+
+  .home__hero .btn {
+    order: 4;
+  }
+
+  .hv-phone {
+    width: 220px;
+  }
+
+  .hv-slot {
+    &--question { right: 30px; top: 30px; }
+    &--star     { left: 20px; bottom: 40px; }
+    &--check    { right: 20px; bottom: 50px; }
+    &--bubble   { left: 10px; top: 60px; }
+  }
+
+  .hv-img {
+    &--q { width: 44px; }
+    &--s { width: 54px; }
+    &--c { width: 48px; }
+    &--b { width: 94px; }
+  }
+
+  .hv-dot { display: none; }
+
+  // Surveys section: full-width, tighter gap
+  .home__surveys {
+    max-width: 375px;
+    gap: 24px;
+    padding: 0;
+  }
+
+  .home__surveys-title {
+    font-size: 54px;
+    line-height: 65px;
+  }
+
+  // Ending-soon: stretch to full width, increase inner gap
+  .home__ending-soon {
+    width: 375px;
+    gap: 48px;
+  }
+
+  .home__ending-title {
+    font-size: 24px;
+    line-height: 30px;
+    padding-left: 16px;
+  }
+
+  // Cards row: horizontal scroll carousel, scrollbar versteckt
+  .home__cards-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 0 16px;
+    gap: 16px;
+    scrollbar-width: none; // Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome / Safari / Edge
+    }
+  }
+
+  // Controls: stack filters above sort
+  .home__controls {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 16px;
+    gap: 16px;
+  }
+
+  .home__filters {
+    gap: 16px;
+  }
+
+  // Survey list: single column with side padding
+  .home__list {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    gap: 15px;
+  }
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -403,4 +537,12 @@
     color: $color-dark-text;
     font-size: 18px;
   }
+}
+
+.btn__icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0);
 }

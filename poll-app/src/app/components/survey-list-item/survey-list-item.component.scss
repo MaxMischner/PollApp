@@ -74,3 +74,14 @@
     color: $color-dark-text;
   }
 }
+
+@media (max-width: 480px) {
+  .survey-item {
+    padding: 12px 16px;
+
+    &__title {
+      font-size: 20px;
+      line-height: 25px;
+    }
+  }
+}

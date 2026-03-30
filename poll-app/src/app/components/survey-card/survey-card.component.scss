@@ -72,3 +72,16 @@
     color: $color-dark-text;
   }
 }
+
+@media (max-width: 480px) {
+  .survey-card {
+    width: 250px;
+    min-height: 233px;
+    padding: 24px 16px;
+
+    &__title {
+      font-size: 24px;
+      line-height: 30px;
+    }
+  }
+}
