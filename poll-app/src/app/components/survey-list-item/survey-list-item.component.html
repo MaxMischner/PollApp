@@ -6,6 +6,9 @@
   <div class="survey-item__content">
     <span class="survey-item__category">{{ survey().category }}</span>
     <h3 class="survey-item__title">{{ survey().title }}</h3>
+    @if (survey().description) {
+      <p class="survey-item__description">{{ survey().description }}</p>
+    }
   </div>
 
   <footer class="survey-item__footer">

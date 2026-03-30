@@ -40,8 +40,8 @@ export class SurveyDetailComponent implements OnInit {
     });
   });
 
-  /** Initializes the component by loading the survey from the route parameter. */
-  ngOnInit(): void {
+  /** Initializes the component by loading the survey and checking vote status. */
+  async ngOnInit(): Promise<void> {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (!idParam) {
       this.router.navigate(['']);
@@ -54,6 +54,9 @@ export class SurveyDetailComponent implements OnInit {
 
     if (found?.status === 'closed') {
       this.hasVoted.set(true);
+    } else if (found) {
+      const voted = await this.surveyService.hasVotedInSurvey(id);
+      this.hasVoted.set(voted);
     }
   }
 
@@ -84,19 +87,24 @@ export class SurveyDetailComponent implements OnInit {
     return choices?.includes(optionId) ?? false;
   }
 
-  /** Submits the vote and refreshes the survey results. */
-  submitVote(): void {
+  /** Submits the vote to Supabase and refreshes the survey results. */
+  async submitVote(): Promise<void> {
     if (!this.canSubmit()) return;
     const survey = this.survey();
     if (!survey) return;
 
     const state = this.selectedOptions();
+    const votePromises: Promise<void>[] = [];
+
     Object.entries(state).forEach(([questionIdStr, optionIds]) => {
       const questionId = Number(questionIdStr);
       optionIds.forEach((optionId) => {
-        this.surveyService.vote(survey.id, questionId, optionId);
+        votePromises.push(this.surveyService.vote(questionId, optionId));
       });
     });
+
+    await Promise.all(votePromises);
+    await this.surveyService.loadSurveys();
 
     this.hasVoted.set(true);
     this.survey.set(this.surveyService.getSurveyById(survey.id) ?? null);

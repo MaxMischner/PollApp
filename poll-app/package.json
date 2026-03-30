@@ -20,6 +20,7 @@
     "@fontsource/mulish": "^5.2.8",
     "@fontsource/nerko-one": "^5.2.7",
     "@fontsource/nokora": "^5.2.8",
+    "@supabase/supabase-js": "^2.100.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

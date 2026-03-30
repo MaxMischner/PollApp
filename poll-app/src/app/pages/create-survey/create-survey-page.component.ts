@@ -103,11 +103,12 @@ export class CreateSurveyPageComponent {
     }
   }
 
-  /** Submits the survey form and navigates to the home page. */
-  submit(): void {
+  /** Submits the survey form to Supabase and navigates to the home page. */
+  async submit(): Promise<void> {
     if (this.form.invalid) return;
     const value = this.form.value;
-    this.surveyService.createSurvey({
+
+    await this.surveyService.createSurvey({
       title: value.title!,
       description: value.description || undefined,
       deadline: value.deadline ? new Date(value.deadline) : undefined,
@@ -124,6 +125,7 @@ export class CreateSurveyPageComponent {
         })),
       })),
     });
+
     this.router.navigate(['']);
   }
 
