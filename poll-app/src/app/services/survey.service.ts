@@ -178,9 +178,11 @@ export class SurveyService {
     });
   }
 
+  private votesChannel: ReturnType<typeof this.supabase.channel> | null = null;
+
   /** Subscribes to real-time vote inserts and reloads surveys on change. */
   subscribeToVotes(): void {
-    this.supabase
+    this.votesChannel = this.supabase
       .channel('votes-channel')
       .on(
         'postgres_changes',
@@ -188,5 +190,13 @@ export class SurveyService {
         () => { this.loadSurveys(); }
       )
       .subscribe();
+  }
+
+  /** Unsubscribes from the real-time votes channel. */
+  unsubscribeFromVotes(): void {
+    if (this.votesChannel) {
+      this.supabase.removeChannel(this.votesChannel);
+      this.votesChannel = null;
+    }
   }
 }

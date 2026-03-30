@@ -23,7 +23,6 @@ export interface Survey {
   status: SurveyStatus;
   questions: Question[];
   createdAt: Date;
-  readonly totalVotes?: number;
 }
 
 export type CreateSurveyData = Omit<Survey, 'id' | 'createdAt' | 'status'>;

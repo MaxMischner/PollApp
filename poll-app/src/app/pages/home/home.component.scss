@@ -379,22 +379,18 @@
   padding: $spacing-xxl;
 }
 
-// ─── Mobile (≤ 480 px / Figma 375 px frame) ───────────────────────────────
 @media (max-width: 480px) {
 
   .home {
     padding: 48px 0;
   }
 
-  // Logo bar: remove desktop vertical padding, add side padding
   .home__logo-bar {
     max-width: 100%;
     padding: 0 16px;
     margin-bottom: 0;
   }
 
-  // Hero: display:contents löst die Wrapper auf → alle 4 Kinder werden
-  // direkte Flex-Items von .home__hero und lassen sich frei sortieren.
   .home__hero {
     flex-direction: column;
     align-items: center;
@@ -455,7 +451,6 @@
 
   .hv-dot { display: none; }
 
-  // Surveys section: full-width, tighter gap
   .home__surveys {
     max-width: 375px;
     gap: 24px;
@@ -467,7 +462,6 @@
     line-height: 65px;
   }
 
-  // Ending-soon: stretch to full width, increase inner gap
   .home__ending-soon {
     width: 375px;
     gap: 48px;
@@ -479,21 +473,19 @@
     padding-left: 16px;
   }
 
-  // Cards row: horizontal scroll carousel, scrollbar versteckt
   .home__cards-row {
     flex-wrap: nowrap;
     justify-content: flex-start;
     overflow-x: auto;
     padding: 0 16px;
     gap: 16px;
-    scrollbar-width: none; // Firefox
+    scrollbar-width: none;
 
     &::-webkit-scrollbar {
-      display: none; // Chrome / Safari / Edge
+      display: none;
     }
   }
 
-  // Controls: stack filters above sort
   .home__controls {
     flex-direction: column;
     align-items: flex-start;
@@ -505,7 +497,6 @@
     gap: 16px;
   }
 
-  // Survey list: single column with side padding
   .home__list {
     grid-template-columns: 1fr;
     padding: 0 16px;

@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { SurveyService } from '../../services/survey.service';
@@ -17,7 +17,7 @@ type ActiveTab = 'active' | 'past';
     SurveyListItemComponent,
   ],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private surveyService = inject(SurveyService);
   private router = inject(Router);
 
@@ -44,9 +44,13 @@ export class HomeComponent implements OnInit {
     return cat ? this.pastSurveys().filter((s) => s.category === cat) : this.pastSurveys();
   });
 
-  ngOnInit(): void {
-    this.surveyService.loadSurveys();
+  async ngOnInit(): Promise<void> {
+    await this.surveyService.loadSurveys();
     this.surveyService.subscribeToVotes();
+  }
+
+  ngOnDestroy(): void {
+    this.surveyService.unsubscribeFromVotes();
   }
 
   /** Sets the active tab to either active or past surveys. */

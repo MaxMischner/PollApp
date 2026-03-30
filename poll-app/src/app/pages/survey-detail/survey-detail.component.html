@@ -80,7 +80,7 @@
           <div class="detail__cta-row">
             <button
               class="btn btn--complete"
-              [disabled]="!canSubmit()"
+              [disabled]="!canSubmit() || isSubmitting()"
               (click)="submitVote()"
             >
               Complete survey

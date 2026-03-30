@@ -23,6 +23,7 @@ export class SurveyDetailComponent implements OnInit {
 
   protected survey = signal<Survey | null>(null);
   protected hasVoted = signal<boolean>(false);
+  protected isSubmitting = signal<boolean>(false);
   protected selectedOptions = signal<VoteState>({});
   protected resultsOpen = signal<boolean>(true);
 
@@ -49,7 +50,13 @@ export class SurveyDetailComponent implements OnInit {
     }
 
     const id = Number(idParam);
-    const found = this.surveyService.getSurveyById(id);
+    let found = this.surveyService.getSurveyById(id);
+
+    if (!found) {
+      await this.surveyService.loadSurveys();
+      found = this.surveyService.getSurveyById(id);
+    }
+
     this.survey.set(found ?? null);
 
     if (found?.status === 'closed') {
@@ -89,25 +96,31 @@ export class SurveyDetailComponent implements OnInit {
 
   /** Submits the vote to Supabase and refreshes the survey results. */
   async submitVote(): Promise<void> {
-    if (!this.canSubmit()) return;
+    if (!this.canSubmit() || this.isSubmitting()) return;
     const survey = this.survey();
     if (!survey) return;
 
-    const state = this.selectedOptions();
-    const votePromises: Promise<void>[] = [];
+    this.isSubmitting.set(true);
 
-    Object.entries(state).forEach(([questionIdStr, optionIds]) => {
-      const questionId = Number(questionIdStr);
-      optionIds.forEach((optionId) => {
-        votePromises.push(this.surveyService.vote(questionId, optionId));
+    try {
+      const state = this.selectedOptions();
+      const votePromises: Promise<void>[] = [];
+
+      Object.entries(state).forEach(([questionIdStr, optionIds]) => {
+        const questionId = Number(questionIdStr);
+        optionIds.forEach((optionId) => {
+          votePromises.push(this.surveyService.vote(questionId, optionId));
+        });
       });
-    });
 
-    await Promise.all(votePromises);
-    await this.surveyService.loadSurveys();
+      await Promise.all(votePromises);
+      await this.surveyService.loadSurveys();
 
-    this.hasVoted.set(true);
-    this.survey.set(this.surveyService.getSurveyById(survey.id) ?? null);
+      this.hasVoted.set(true);
+      this.survey.set(this.surveyService.getSurveyById(survey.id) ?? null);
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 
   /** Returns the vote percentage for a specific option within a question. */
@@ -115,19 +128,6 @@ export class SurveyDetailComponent implements OnInit {
     const totalVotes = question.options.reduce((sum, opt) => sum + opt.votes, 0);
     if (totalVotes === 0) return 0;
     return Math.round((option.votes / totalVotes) * PERCENTAGE_BASE);
-  }
-
-  /** Returns the total number of votes across all options in a question. */
-  getTotalVotesForQuestion(question: Question): number {
-    return question.options.reduce((sum, opt) => sum + opt.votes, 0);
-  }
-
-  /** Returns the highest vote percentage among all options of a question. */
-  getWinnerPercentage(question: Question): number {
-    const percentages = question.options.map((opt) =>
-      this.getVotePercentage(question, opt)
-    );
-    return Math.max(...percentages);
   }
 
   /** Navigates back to the home page. */
