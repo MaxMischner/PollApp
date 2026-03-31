@@ -44,11 +44,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     return cat ? this.pastSurveys().filter((s) => s.category === cat) : this.pastSurveys();
   });
 
+  /** Loads all surveys and subscribes to real-time vote updates. */
   async ngOnInit(): Promise<void> {
     await this.surveyService.loadSurveys();
     this.surveyService.subscribeToVotes();
   }
 
+  /** Unsubscribes from the real-time votes channel. */
   ngOnDestroy(): void {
     this.surveyService.unsubscribeFromVotes();
   }

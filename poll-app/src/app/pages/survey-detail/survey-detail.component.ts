@@ -27,10 +27,12 @@ export class SurveyDetailComponent implements OnInit {
   protected selectedOptions = signal<VoteState>({});
   protected resultsOpen = signal<boolean>(true);
 
+  /** Toggles the visibility of the results panel. */
   protected toggleResults(): void {
     this.resultsOpen.update(v => !v);
   }
 
+  /** Returns true when every question has at least one option selected. */
   protected canSubmit = computed(() => {
     const survey = this.survey();
     if (!survey) return false;
@@ -99,28 +101,26 @@ export class SurveyDetailComponent implements OnInit {
     if (!this.canSubmit() || this.isSubmitting()) return;
     const survey = this.survey();
     if (!survey) return;
-
     this.isSubmitting.set(true);
-
     try {
-      const state = this.selectedOptions();
-      const votePromises: Promise<void>[] = [];
-
-      Object.entries(state).forEach(([questionIdStr, optionIds]) => {
-        const questionId = Number(questionIdStr);
-        optionIds.forEach((optionId) => {
-          votePromises.push(this.surveyService.vote(questionId, optionId));
-        });
-      });
-
-      await Promise.all(votePromises);
+      await Promise.all(this.buildVotePromises());
       await this.surveyService.loadSurveys();
-
       this.hasVoted.set(true);
       this.survey.set(this.surveyService.getSurveyById(survey.id) ?? null);
     } finally {
       this.isSubmitting.set(false);
     }
+  }
+
+  private buildVotePromises(): Promise<void>[] {
+    const promises: Promise<void>[] = [];
+    Object.entries(this.selectedOptions()).forEach(([qIdStr, optionIds]) => {
+      const questionId = Number(qIdStr);
+      optionIds.forEach((optionId) => {
+        promises.push(this.surveyService.vote(questionId, optionId));
+      });
+    });
+    return promises;
   }
 
   /** Returns the vote percentage for a specific option within a question. */

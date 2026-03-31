@@ -42,14 +42,14 @@
 
         <div class="detail__questions-grid">
           @for (question of survey()!.questions; track question.id; let i = $index) {
-            <div class="question-block">
+            <article class="question-block">
 
-              <div class="question-block__header">
+              <header class="question-block__header">
                 <h2 class="question-block__title">{{ question.text }}</h2>
                 @if (question.allowMultiple) {
                   <p class="question-block__hint">More than one answers are possible.</p>
                 }
-              </div>
+              </header>
 
               <div class="question-block__options">
                 @for (option of question.options; track option.id) {
@@ -72,7 +72,7 @@
                 }
               </div>
 
-            </div>
+            </article>
           }
         </div>
 
@@ -92,13 +92,13 @@
 
       <aside class="detail__results" [class.detail__results--open]="resultsOpen()">
 
-        <!-- Nur auf Mobile sichtbar: Dropdown-Toggle -->
+        <!-- Mobile only: toggle button for results panel -->
         <button class="results__toggle" (click)="toggleResults()">
           <span class="results__toggle-label">{{ resultsOpen() ? 'Close result' : 'See result' }}</span>
-          <span class="results__toggle-arrow" [class.results__toggle-arrow--open]="resultsOpen()">▾</span>
+          <span class="results__toggle-arrow" [class.results__toggle-arrow--open]="resultsOpen()" aria-hidden="true">▾</span>
         </button>
 
-        <!-- Content: Desktop immer sichtbar, Mobile nur wenn offen -->
+        <!-- Desktop always visible, mobile only when open -->
         <div class="results__content">
           <h2 class="results__title">
             Survey results
@@ -107,15 +107,9 @@
             }
           </h2>
 
-          @if (!hasVoted() && survey()!.status === 'active') {
-            <div class="results__placeholder">
-              <p class="results__placeholder-text">Results will be shown here after participants complete the survey.</p>
-              <p class="results__placeholder-empty">There are no answers yet.</p>
-            </div>
-          } @else {
-            <div class="results__list">
+          <div class="results__list">
               @for (question of survey()!.questions; track question.id) {
-                <div class="result-block">
+                <section class="result-block">
 
                   <h3 class="result-block__question">{{ question.text }}</h3>
 
@@ -138,10 +132,9 @@
                     }
                   </div>
 
-                </div>
+                </section>
               }
             </div>
-          }
         </div>
 
       </aside>
@@ -150,8 +143,8 @@
   </main>
 
 } @else {
-  <div class="detail__not-found">
+  <main class="detail__not-found">
     <p>Survey not found.</p>
     <button class="btn btn--create" (click)="goBack()">← Back</button>
-  </div>
+  </main>
 }

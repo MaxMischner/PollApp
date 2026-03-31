@@ -1,7 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 
 import { SupabaseService } from './supabase.service';
-import { Survey, CreateSurveyData } from '../models/survey.model';
+import { Survey, Question, CreateSurveyData } from '../models/survey.model';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 const SEVEN_DAYS_MS = 7 * MS_PER_DAY;
@@ -64,60 +64,64 @@ export class SurveyService {
   /** Loads all surveys with their questions, options and vote counts from Supabase. */
   async loadSurveys(): Promise<void> {
     const { data: surveysData, error } = await this.supabase
-      .from('surveys')
-      .select('*')
-      .order('created_at', { ascending: false });
-
+      .from('surveys').select('*').order('created_at', { ascending: false });
     if (error || !surveysData) return;
-
-    const { data: questionsData } = await this.supabase
-      .from('questions')
-      .select('*')
-      .order('order_index', { ascending: true });
-
-    const { data: optionsData } = await this.supabase
-      .from('options')
-      .select('*');
-
-    const { data: votesData } = await this.supabase
-      .from('votes')
-      .select('option_id');
-
-    const voteCounts: Record<number, number> = {};
-    for (const vote of votesData ?? []) {
-      voteCounts[vote.option_id] = (voteCounts[vote.option_id] ?? 0) + 1;
-    }
-
-    const surveys: Survey[] = surveysData.map((row) => {
-      const questions = (questionsData ?? [])
-        .filter((q) => q.survey_id === row.id)
-        .map((q) => ({
-          id: q.id as number,
-          text: q.text as string,
-          allowMultiple: q.allow_multiple as boolean,
-          options: (optionsData ?? [])
-            .filter((o) => o.question_id === q.id)
-            .map((o) => ({
-              id: o.id as number,
-              label: o.label as string,
-              text: o.text as string,
-              votes: voteCounts[o.id as number] ?? 0,
-            })),
-        }));
-
-      return {
-        id: row.id as number,
-        title: row.title as string,
-        description: (row.description as string) ?? undefined,
-        deadline: row.deadline ? new Date(row.deadline as string) : undefined,
-        category: (row.category as string) ?? undefined,
-        status: row.status as Survey['status'],
-        createdAt: new Date(row.created_at as string),
-        questions,
-      };
-    });
-
+    const [questions, options, votes] = await this.fetchRelatedData();
+    const voteCounts = this.buildVoteCounts(votes ?? []);
+    const surveys = surveysData.map((row) =>
+      this.buildSurvey(row, questions ?? [], options ?? [], voteCounts)
+    );
     this.surveysSignal.set(surveys);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private async fetchRelatedData(): Promise<[any[], any[], any[]]> {
+    const [{ data: q }, { data: o }, { data: v }] = await Promise.all([
+      this.supabase.from('questions').select('*').order('order_index', { ascending: true }),
+      this.supabase.from('options').select('*'),
+      this.supabase.from('votes').select('option_id'),
+    ]);
+    return [q ?? [], o ?? [], v ?? []];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private buildVoteCounts(votes: any[]): Record<number, number> {
+    const counts: Record<number, number> = {};
+    for (const vote of votes) {
+      counts[vote.option_id] = (counts[vote.option_id] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private buildSurvey(row: any, questions: any[], options: any[], voteCounts: Record<number, number>): Survey {
+    return {
+      id: row.id as number,
+      title: row.title as string,
+      description: (row.description as string) ?? undefined,
+      deadline: row.deadline ? new Date(row.deadline as string) : undefined,
+      category: (row.category as string) ?? undefined,
+      status: row.status as Survey['status'],
+      createdAt: new Date(row.created_at as string),
+      questions: questions.filter((q) => q.survey_id === row.id).map((q) => this.buildQuestion(q, options, voteCounts)),
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private buildQuestion(q: any, options: any[], voteCounts: Record<number, number>): Question {
+    return {
+      id: q.id as number,
+      text: q.text as string,
+      allowMultiple: q.allow_multiple as boolean,
+      options: options
+        .filter((o) => o.question_id === q.id)
+        .map((o) => ({
+          id: o.id as number,
+          label: o.label as string,
+          text: o.text as string,
+          votes: voteCounts[o.id as number] ?? 0,
+        })),
+    };
   }
 
   /** Returns a survey by its ID, or undefined if not found. */

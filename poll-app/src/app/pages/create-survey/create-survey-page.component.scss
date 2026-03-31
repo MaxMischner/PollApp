@@ -65,6 +65,7 @@
     font-weight: 400;
     color: #ee9236;
     line-height: 1.1;
+    margin: 0;
   }
 
   &__form {
@@ -264,7 +265,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
-  width: 429px;
+  width: min(429px, 100%);
 }
 
 .question-slot--add {
@@ -277,7 +278,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-  width: 429px;
+  width: min(429px, 100%);
 }
 
 .answers-section {
@@ -531,10 +532,11 @@
     gap: 48px;
     border-radius: 5px 100px 5px 5px;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .cs-card__header {
-    width: 325px;
+    width: min(325px, calc(100% - 32px));
     align-items: flex-start;
   }
 
@@ -565,7 +567,7 @@
   }
 
   .cs-card__footer {
-    width: 325px;
+    width: min(325px, calc(100% - 32px));
   }
 
   .btn--publish {
@@ -577,15 +579,16 @@
   .form-fields-container {
     width: 100%;
     max-width: 340px;
-    padding: 40px 10px;
+    padding: 40px 16px;
     gap: 48px;
     border-radius: 5px 80px 5px 5px;
+    box-sizing: border-box;
   }
 
   .fields-top-row {
     flex-direction: column;
     gap: 8px;
-    width: 320px;
+    width: 100%;
   }
 
   .field-col-left {
@@ -610,13 +613,13 @@
 
   .questions-row {
     flex-direction: column;
-    width: 320px;
+    width: 100%;
     column-gap: 0;
     row-gap: 40px;
   }
 
   .question-slot {
-    width: 320px;
+    width: 100%;
     gap: 40px;
   }
 
@@ -625,6 +628,6 @@
   }
 
   .question-builder {
-    width: 320px;
+    width: 100%;
   }
 }

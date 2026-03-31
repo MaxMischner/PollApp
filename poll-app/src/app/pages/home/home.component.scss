@@ -57,8 +57,9 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 40px;
-  width: 712px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
+  max-width: 712px;
 }
 
 .home__headline {
@@ -90,13 +91,15 @@
 
 .hero-visual {
   position: relative;
-  width: 460px;
-  height: 460px;
+  width: min(460px, 100%);
+  aspect-ratio: 1;
+  height: auto;
+  margin: 0;
 }
 
 .hv-phone {
   position: absolute;
-  width: 400px;
+  width: min(400px, 87%);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -111,51 +114,41 @@
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &--question {
-    right: 78px;
-    top: 70px;
+    right: 17%;
+    top: 15%;
+    width: 17%;
     z-index: 3;
   }
 
   &--star {
-    left: 72px;
-    bottom: 100px;
+    left: 16%;
+    bottom: 22%;
+    width: 20%;
   }
 
   &--check {
-    right: 72px;
-    bottom: 115px;
+    right: 16%;
+    bottom: 25%;
+    width: 18%;
   }
 
   &--bubble {
-    left: 68px;
-    top: 120px;
+    left: 15%;
+    top: 26%;
+    width: 36%;
     z-index: 3;
   }
 }
 
 .hv-img {
   display: block;
+  width: 100%;
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18));
 
-  &--q {
-    width: 78px;
-    animation: hv-float 4s ease-in-out infinite 1s;
-  }
-
-  &--s {
-    width: 94px;
-    animation: hv-float 3.9s ease-in-out infinite 1.4s;
-  }
-
-  &--c {
-    width: 84px;
-    animation: hv-float 4.8s ease-in-out infinite 0.7s;
-  }
-
-  &--b {
-    width: 165px;
-    animation: hv-float 3.6s ease-in-out infinite 0.4s;
-  }
+  &--q { animation: hv-float 4s ease-in-out infinite 1s; }
+  &--s { animation: hv-float 3.9s ease-in-out infinite 1.4s; }
+  &--c { animation: hv-float 4.8s ease-in-out infinite 0.7s; }
+  &--b { animation: hv-float 3.6s ease-in-out infinite 0.4s; }
 }
 
 .hero-visual:hover {
@@ -169,33 +162,31 @@
   position: absolute;
   border-radius: 50%;
   z-index: 1;
+  aspect-ratio: 1;
 
   &--peach {
-    width: 20px;
-    height: 20px;
+    width: 4.35%;
+    right: 13.5%;
+    top: 23.5%;
     background-color: #ffcfa1;
-    right: 62px;
-    top: 108px;
     opacity: 0.75;
     animation: hv-float 3.2s ease-in-out infinite 1.8s;
   }
 
   &--purple {
-    width: 16px;
-    height: 16px;
+    width: 3.48%;
+    left: 7.83%;
+    bottom: 30.4%;
     background-color: $color-purple-mid;
-    left: 36px;
-    bottom: 140px;
     opacity: 0.6;
     animation: hv-float 4.4s ease-in-out infinite 0.9s;
   }
 
   &--sm {
-    width: 10px;
-    height: 10px;
+    width: 2.17%;
+    left: 3.91%;
+    bottom: 21.7%;
     background-color: $color-purple-mid;
-    left: 18px;
-    bottom: 100px;
     opacity: 0.4;
     animation: hv-float 3.7s ease-in-out infinite 2.2s;
   }
@@ -258,6 +249,13 @@
 }
 
 .home__filters {
+  display: block;
+}
+
+.home__filter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -394,11 +392,13 @@
   .home__hero {
     flex-direction: column;
     align-items: center;
+    width: 100%;
     max-width: 375px;
-    padding: 0;
+    padding: 0 16px;
     margin-top: 54px;
     margin-bottom: 80px;
     gap: 24px;
+    box-sizing: border-box;
   }
 
   .home__hero-left,
@@ -408,62 +408,47 @@
 
   .home__headline {
     order: 1;
-    width: 343px;
-    font-size: 62px;
-    line-height: 50px;
+    width: 100%;
+    font-size: clamp(40px, 16vw, 62px);
+    line-height: 1.1;
   }
 
   .hero-visual {
     order: 2;
-    width: 343px;
-    height: 250px;
+    width: 100%;
+    max-width: 343px;
+    height: auto;
   }
 
   .home__subtext {
     order: 3;
     font-size: 18px;
     line-height: 23px;
-    width: 343px;
-    max-width: 343px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .home__hero .btn {
     order: 4;
   }
 
-  .hv-phone {
-    width: 220px;
-  }
-
-  .hv-slot {
-    &--question { right: 30px; top: 30px; }
-    &--star     { left: 20px; bottom: 40px; }
-    &--check    { right: 20px; bottom: 50px; }
-    &--bubble   { left: 10px; top: 60px; }
-  }
-
-  .hv-img {
-    &--q { width: 44px; }
-    &--s { width: 54px; }
-    &--c { width: 48px; }
-    &--b { width: 94px; }
-  }
-
   .hv-dot { display: none; }
 
   .home__surveys {
+    width: 100%;
     max-width: 375px;
     gap: 24px;
     padding: 0;
+    box-sizing: border-box;
   }
 
   .home__surveys-title {
-    font-size: 54px;
-    line-height: 65px;
+    font-size: clamp(36px, 14vw, 54px);
+    line-height: 1.2;
   }
 
   .home__ending-soon {
-    width: 375px;
+    width: 100%;
     gap: 48px;
   }
 
@@ -493,7 +478,7 @@
     gap: 16px;
   }
 
-  .home__filters {
+  .home__filter-list {
     gap: 16px;
   }
 

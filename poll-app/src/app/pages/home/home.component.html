@@ -16,33 +16,34 @@
       </p>
       <button class="btn btn--primary" (click)="openCreateSurvey()">
         New survey
-        <img src="add_circle.png" alt="" class="btn__icon" />
+        <img src="add_circle.png" alt="" aria-hidden="true" class="btn__icon" />
       </button>
     </div>
     <div class="home__hero-right">
-      <div class="hero-visual">
+      <figure class="hero-visual">
 
         <span class="hv-slot hv-slot--question">
-          <img src="Questin mark.png" class="hv-img hv-img--q" alt="" />
+          <img src="Questin mark.png" class="hv-img hv-img--q" alt="" aria-hidden="true" />
         </span>
         <span class="hv-slot hv-slot--star">
-          <img src="star.png" class="hv-img hv-img--s" alt="" />
+          <img src="star.png" class="hv-img hv-img--s" alt="" aria-hidden="true" />
         </span>
         <span class="hv-slot hv-slot--check">
-          <img src="check.png" class="hv-img hv-img--c" alt="" />
+          <img src="check.png" class="hv-img hv-img--c" alt="" aria-hidden="true" />
         </span>
 
-        <img src="phone.png" class="hv-phone" alt="" />
+        <img src="phone.png" class="hv-phone" alt="" aria-hidden="true" />
 
         <span class="hv-slot hv-slot--bubble">
-          <img src="typing bubble.png" class="hv-img hv-img--b" alt="" />
+          <img src="typing bubble.png" class="hv-img hv-img--b" alt="" aria-hidden="true" />
         </span>
 
         <span class="hv-dot hv-dot--peach"></span>
         <span class="hv-dot hv-dot--purple"></span>
         <span class="hv-dot hv-dot--sm"></span>
 
-      </div>
+        <figcaption class="visually-hidden">Illustration einer Umfrage-App auf dem Smartphone</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -51,7 +52,7 @@
     <h2 class="home__surveys-title">Your surveys</h2>
 
     @if (endingSoon().length > 0) {
-      <div class="home__ending-soon">
+      <section class="home__ending-soon">
         <h3 class="home__ending-title">Ending soon surveys</h3>
         <div class="home__cards-row">
           @for (survey of endingSoon(); track survey.id) {
@@ -61,26 +62,34 @@
             />
           }
         </div>
-      </div>
+      </section>
     }
 
     <div class="home__controls">
-      <div class="home__filters">
-        <button
-          class="filter-pill"
-          [class.filter-pill--active]="activeTab() === 'active'"
-          (click)="setActiveTab('active')"
-        >
-          Active survey
-        </button>
-        <button
-          class="filter-pill"
-          [class.filter-pill--active]="activeTab() === 'past'"
-          (click)="setActiveTab('past')"
-        >
-          Past survey
-        </button>
-      </div>
+      <nav class="home__filters" aria-label="Survey filter">
+        <ul class="home__filter-list">
+          <li>
+            <button
+              class="filter-pill"
+              [class.filter-pill--active]="activeTab() === 'active'"
+              (click)="setActiveTab('active')"
+              [attr.aria-current]="activeTab() === 'active' ? 'true' : null"
+            >
+              Active survey
+            </button>
+          </li>
+          <li>
+            <button
+              class="filter-pill"
+              [class.filter-pill--active]="activeTab() === 'past'"
+              (click)="setActiveTab('past')"
+              [attr.aria-current]="activeTab() === 'past' ? 'true' : null"
+            >
+              Past survey
+            </button>
+          </li>
+        </ul>
+      </nav>
 
       <div class="home__sort" (click)="toggleSort()">
         <span class="home__sort-label">

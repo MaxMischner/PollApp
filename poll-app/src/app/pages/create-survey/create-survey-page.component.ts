@@ -6,10 +6,22 @@ import {
   FormControl,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { SurveyService } from '../../services/survey.service';
+import { CreateSurveyData } from '../../models/survey.model';
+
+/** Validates that a date input is not in the past. */
+function futureDateValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) return null;
+  const selected = new Date(control.value);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return selected < today ? { pastDate: true } : null;
+}
 
 type OptionForm = FormGroup<{
   text: FormControl<string>;
@@ -53,12 +65,13 @@ export class CreateSurveyPageComponent {
   ];
 
   protected form!: SurveyForm;
+  protected readonly todayDate = new Date().toISOString().split('T')[0];
 
   constructor() {
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
-      deadline: [''],
+      deadline: ['', [futureDateValidator]],
       category: [''],
       questions: this.fb.array([this.createQuestionGroup()]),
     }) as SurveyForm;
@@ -106,9 +119,13 @@ export class CreateSurveyPageComponent {
   /** Submits the survey form to Supabase and navigates to the home page. */
   async submit(): Promise<void> {
     if (this.form.invalid) return;
-    const value = this.form.value;
+    await this.surveyService.createSurvey(this.buildSurveyData());
+    this.router.navigate(['']);
+  }
 
-    await this.surveyService.createSurvey({
+  private buildSurveyData(): CreateSurveyData {
+    const value = this.form.value;
+    return {
       title: value.title!,
       description: value.description || undefined,
       deadline: value.deadline ? new Date(value.deadline) : undefined,
@@ -124,9 +141,7 @@ export class CreateSurveyPageComponent {
           votes: 0,
         })),
       })),
-    });
-
-    this.router.navigate(['']);
+    };
   }
 
   /** Navigates back to the home page without saving. */

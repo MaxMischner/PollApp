@@ -2,6 +2,9 @@
   class="survey-item"
   [class.survey-item--closed]="survey().status === 'closed'"
   (click)="onItemClick()"
+  [attr.role]="survey().status === 'closed' ? null : 'button'"
+  [attr.tabindex]="survey().status === 'closed' ? null : '0'"
+  (keydown.enter)="onItemClick()"
 >
   <div class="survey-item__content">
     <span class="survey-item__category">{{ survey().category }}</span>
@@ -12,12 +15,14 @@
   </div>
 
   <footer class="survey-item__footer">
-    <span class="survey-item__deadline">
-      @if (survey().status === 'closed') {
-        Ended: {{ formattedDeadline }}
-      } @else {
-        Ends in {{ daysLeft }} {{ daysLeft === 1 ? 'Day' : 'Days' }}
-      }
-    </span>
+    @if (survey().deadline) {
+      <span class="survey-item__deadline">
+        @if (survey().status === 'closed') {
+          Ended: {{ formattedDeadline }}
+        } @else {
+          Ends in {{ daysLeft }} {{ daysLeft === 1 ? 'Day' : 'Days' }}
+        }
+      </span>
+    }
   </footer>
 </article>
