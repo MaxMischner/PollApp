@@ -437,6 +437,57 @@
   50%       { opacity: 0.5; }
 }
 
+@media (max-width: 950px) {
+
+  .detail__content {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 clamp(16px, 4vw, 48px);
+    gap: 56px;
+    margin: 54px auto 0;
+    box-sizing: border-box;
+  }
+
+  .detail__survey-panel {
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+
+  .detail__results {
+    width: 100%;
+    position: static;
+    top: auto;
+    align-self: auto;
+  }
+
+  .results__toggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 4px 6px 4px 10px;
+    gap: 4px;
+    width: 153px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .results__content {
+    display: none;
+  }
+
+  .detail__results--open .results__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
 @media (max-width: 720px) {
 
   .detail {
@@ -474,19 +525,12 @@
   }
 
   .detail__content {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
     max-width: 375px;
     padding: 0 16px;
-    gap: 56px;
-    margin: 54px auto 0;
-    box-sizing: border-box;
   }
 
   .detail__survey-panel {
-    width: 100%;
-    padding: 40px 0;
+    padding: 40px ;
     border-radius: 0 100px 0 0;
     gap: 0;
     align-items: center;
@@ -536,43 +580,7 @@
     border-radius: 10px;
   }
 
-  .detail__results {
-    width: 100%;
-    position: static;
-    top: auto;
-    align-self: auto;
-  }
-
   .results__title {
     font-size: 32px;
-  }
-
-  .results__placeholder {
-    width: 100%;
-  }
-
-  .results__toggle {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 4px 6px 4px 10px;
-    gap: 4px;
-    width: 153px;
-    height: 32px;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .results__content {
-    display: none;
-  }
-
-  .detail__results--open .results__content {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
   }
 }
