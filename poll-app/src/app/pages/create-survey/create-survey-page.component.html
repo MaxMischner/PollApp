@@ -253,13 +253,35 @@
       </div>
 
       <footer class="cs-card__footer">
-        <button
-          type="submit"
-          class="btn btn--publish"
-          [disabled]="form.invalid"
-        >
-          Publish
-        </button>
+        <div class="publish-wrapper">
+          <button
+            type="submit"
+            class="btn btn--publish"
+            [disabled]="form.invalid"
+          >
+            Publish
+          </button>
+          @if (form.invalid) {
+            <div class="publish-tooltip">
+              @if (form.get('title')?.invalid) {
+                <span>• Survey name is required (min. 3 characters)</span>
+              }
+              @if (form.get('deadline')?.invalid) {
+                <span>• End date cannot be in the past</span>
+              }
+              @for (q of questions.controls; track $index; let i = $index) {
+                @if (q.get('text')?.invalid) {
+                  <span>• Question {{ i + 1 }}: text is required</span>
+                }
+                @for (opt of getOptions(i).controls; track $index; let j = $index) {
+                  @if (opt.get('text')?.invalid) {
+                    <span>• Question {{ i + 1 }}, Answer {{ getOptionLabel(j) }}: text is required</span>
+                  }
+                }
+              }
+            </div>
+          }
+        </div>
       </footer>
 
     </form>

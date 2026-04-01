@@ -24,6 +24,9 @@
   align-items: flex-start;
   max-width: 1218px;
   margin: 0 auto 40px;
+  padding-inline: clamp(16px, 4vw, 48px);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .detail__logo {
@@ -44,6 +47,9 @@
   gap: 42px;
   max-width: 1218px;
   margin: 0 auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .detail__survey-panel {
