@@ -152,7 +152,7 @@
 
   &__optional {
     font-weight: 400;
-    font-size: 13px;
+    font-size: 16px;
     color: rgba($color-white, 0.6);
   }
 
@@ -192,11 +192,17 @@
     cursor: pointer;
   }
 
+  &__error-slot {
+    min-height: 22px;
+    display: block;
+  }
+
   &__error {
     font-family: $font-body;
-    font-size: 12px;
+    font-size: 16px;
     color: #ff6b6b;
     margin-top: 2px;
+    display: block;
   }
 }
 
@@ -308,7 +314,7 @@
   align-items: center;
   gap: $spacing-xs;
   font-family: $font-body;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   color: $color-white;
   cursor: pointer;
@@ -322,10 +328,15 @@
     background-color: transparent;
     cursor: pointer;
     flex-shrink: 0;
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 
     &:checked {
-      background-color: $color-white;
+      background-color: rgb(255, 207, 161);
+      border-color: rgb(255, 207, 161);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 5L4 7.5L8.5 2.5' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 10px 10px;
     }
   }
 }
@@ -340,10 +351,17 @@
   width: 100%;
 }
 
+.option-input-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .option-input-row {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: $spacing-xs;
   width: 100%;
 
@@ -558,8 +576,8 @@
   }
 }
 
-// ─── Mobile (≤ 480 px) ───────────────────────────────
-@media (max-width: 480px) {
+// ─── Mobile (≤ 720 px) ───────────────────────────────
+@media (max-width: 720px) {
 
   .cs-logo-bar {
     display: flex;

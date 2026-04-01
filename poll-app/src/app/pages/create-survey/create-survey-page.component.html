@@ -45,13 +45,17 @@
                   <img src="Property 1=hover.png"   class="btn-clear__icon btn-clear__icon--hover"   aria-hidden="true" alt="" />
                 </button>
               </div>
-              @if (isFieldInvalid('title')) {
-                @if (form.get('title')?.errors?.['required']) {
-                  <span class="form-field__error">Title is required</span>
-                } @else if (form.get('title')?.errors?.['minlength']) {
-                  <span class="form-field__error">Min. 3 characters</span>
+              <div class="form-field__error-slot">
+                @if (isFieldInvalid('title')) {
+                  @if (form.get('title')?.errors?.['required']) {
+                    <span class="form-field__error">Title is required</span>
+                  } @else if (form.get('title')?.errors?.['blank']) {
+                    <span class="form-field__error">Title cannot be only spaces</span>
+                  } @else if (form.get('title')?.errors?.['minlength']) {
+                    <span class="form-field__error">Min. 3 characters</span>
+                  }
                 }
-              }
+              </div>
             </div>
 
             <div class="field-sub-row">
@@ -75,9 +79,11 @@
                     <img src="Property 1=hover.png"   class="btn-clear__icon btn-clear__icon--hover"   aria-hidden="true" alt="" />
                   </button>
                 </div>
-                @if (isFieldInvalid('deadline')) {
-                  <span class="form-field__error">End date cannot be in the past</span>
-                }
+                <div class="form-field__error-slot">
+                  @if (isFieldInvalid('deadline')) {
+                    <span class="form-field__error">End date cannot be in the past</span>
+                  }
+                </div>
               </div>
 
               <div class="form-field">
@@ -158,9 +164,15 @@
                       <img src="Property 1=hover.png"   class="btn-clear__icon btn-clear__icon--hover"   aria-hidden="true" alt="" />
                     </button>
                   </div>
-                  @if (question.get('text')?.invalid && question.get('text')?.touched) {
-                    <span class="form-field__error">Question text is required</span>
-                  }
+                  <div class="form-field__error-slot">
+                    @if (question.get('text')?.invalid && question.get('text')?.touched) {
+                      @if (question.get('text')?.errors?.['blank']) {
+                        <span class="form-field__error">Question cannot be only spaces</span>
+                      } @else {
+                        <span class="form-field__error">Question text is required</span>
+                      }
+                    }
+                  </div>
                 </div>
 
                 <div class="answers-section">
@@ -177,21 +189,32 @@
                     @for (option of getOptions(i).controls; track $index; let j = $index) {
                       <li [formGroupName]="j" class="option-input-row">
                         <span class="option-input-row__label" aria-hidden="true">{{ getOptionLabel(j) }}.</span>
-                        <div class="input-wrapper">
-                          <input
-                            [id]="'question-' + i + '-option-' + j"
-                            class="form-field__input"
-                            [class.form-field__input--error]="option.get('text')?.invalid && option.get('text')?.touched"
-                            type="text"
-                            formControlName="text"
-                            [placeholder]="'Answer ' + getOptionLabel(j)"
-                            [attr.aria-label]="'Answer option ' + getOptionLabel(j)"
-                            aria-required="true"
-                          />
-                          <button type="button" class="btn-clear" (click)="clearOptionText(i, j)" aria-label="Antwort löschen">
-                            <img src="Property 1=default.png" class="btn-clear__icon btn-clear__icon--default" aria-hidden="true" alt="" />
-                            <img src="Property 1=hover.png"   class="btn-clear__icon btn-clear__icon--hover"   aria-hidden="true" alt="" />
-                          </button>
+                        <div class="option-input-col">
+                          <div class="input-wrapper">
+                            <input
+                              [id]="'question-' + i + '-option-' + j"
+                              class="form-field__input"
+                              [class.form-field__input--error]="option.get('text')?.invalid && option.get('text')?.touched"
+                              type="text"
+                              formControlName="text"
+                              [placeholder]="'Answer ' + getOptionLabel(j)"
+                              [attr.aria-label]="'Answer option ' + getOptionLabel(j)"
+                              aria-required="true"
+                            />
+                            <button type="button" class="btn-clear" (click)="clearOptionText(i, j)" aria-label="Antwort löschen">
+                              <img src="Property 1=default.png" class="btn-clear__icon btn-clear__icon--default" aria-hidden="true" alt="" />
+                              <img src="Property 1=hover.png"   class="btn-clear__icon btn-clear__icon--hover"   aria-hidden="true" alt="" />
+                            </button>
+                          </div>
+                          <div class="form-field__error-slot">
+                            @if (option.get('text')?.invalid && option.get('text')?.touched) {
+                              @if (option.get('text')?.errors?.['blank']) {
+                                <span class="form-field__error">Answer cannot be only spaces</span>
+                              } @else {
+                                <span class="form-field__error">Answer text is required</span>
+                              }
+                            }
+                          </div>
                         </div>
                         @if (getOptions(i).length > 2) {
                           <button
@@ -200,9 +223,6 @@
                             (click)="removeOption(i, j)"
                             [attr.aria-label]="'Antwort ' + getOptionLabel(j) + ' entfernen'"
                           >✕</button>
-                        }
-                        @if (option.get('text')?.invalid && option.get('text')?.touched) {
-                          <span class="form-field__error">Answer text is required</span>
                         }
                       </li>
                     }

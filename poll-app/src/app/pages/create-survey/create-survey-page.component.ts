@@ -14,6 +14,15 @@ import { Router } from '@angular/router';
 import { SurveyService } from '../../services/survey.service';
 import { CreateSurveyData } from '../../models/survey.model';
 
+/** Validates that a string field is not blank (whitespace-only). */
+function notBlankValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as string;
+  if (value && value.trim().length === 0) {
+    return { blank: true };
+  }
+  return null;
+}
+
 /** Validates that a date input is not in the past. */
 function futureDateValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) return null;
@@ -69,7 +78,7 @@ export class CreateSurveyPageComponent {
 
   constructor() {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
+      title: ['', [Validators.required, notBlankValidator, Validators.minLength(3)]],
       description: [''],
       deadline: ['', [futureDateValidator]],
       category: [''],
@@ -172,7 +181,7 @@ export class CreateSurveyPageComponent {
 
   private createQuestionGroup(): QuestionForm {
     return this.fb.group({
-      text: ['', Validators.required],
+      text: ['', [Validators.required, notBlankValidator]],
       allowMultiple: [false],
       options: this.fb.array([
         this.createOptionGroup(),
@@ -183,7 +192,7 @@ export class CreateSurveyPageComponent {
 
   private createOptionGroup(): OptionForm {
     return this.fb.group({
-      text: ['', Validators.required],
+      text: ['', [Validators.required, notBlankValidator]],
     }) as OptionForm;
   }
 }
